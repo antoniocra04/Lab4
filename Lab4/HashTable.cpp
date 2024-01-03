@@ -72,7 +72,6 @@ HashTable& HashTable::Delete(const string& key)
 
 	if (!_items[hashCode])
 	{
-		cout << "Element not exist";
 		return *this;
 	}
 
@@ -106,13 +105,11 @@ HashTable& HashTable::Delete(const string& key)
 		}
 
 		delete deleteItem;
-		cout << "Deleted successfuly" << endl;
 	}
 	else
 	{
 		delete deleteItem;
 		_items[hashCode] = nullptr;
-		cout << "Deleted successfuly"<<endl;
 	}
 
 	_length = _length - 1;
@@ -177,32 +174,18 @@ HashTableItem* HashTable::Search(const string& key)
 	}
 }
 
-ostream& operator<<(ostream& os, HashTable& table)
-{
-	os << "Hash table:" << endl;
-
-	for (int i = 0; i < table._capacity; i++)
-	{
-		os << i + 1 << ") ";
-		if (table._items[i]) 
-		{
-			HashTableItem* currentItem = table._items[i];
-
-			while (currentItem)
-			{
-				os << currentItem->_key << " - " << currentItem->_value << " | ";
-				currentItem = currentItem->_next;
-			}
-		}
-		os << endl;
-	}
-
-	os << endl << "Length: " << table._length << " Capacity: " << table._capacity << endl;
-
-	return os;
-}
-
 HashTable::~HashTable()
 {
-	
+	for (int i = 0; i < _capacity; i++)
+	{
+		HashTableItem* enumerate = _items[i];
+		while (enumerate)
+		{
+			HashTableItem* temp = enumerate;
+			enumerate = enumerate->_next;
+			delete temp;
+		}
+	}
+	delete[] _items;
+	delete[] _pearsonTable;
 }
